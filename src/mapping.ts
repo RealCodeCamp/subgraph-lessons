@@ -3,9 +3,9 @@ import {
   DaiContract,
   Approval,
   LogNote,
-  Transfer
+  Transfer as TransferEvent, 
 } from "../generated/DaiContract/DaiContract"
-import { ExampleEntity } from "../generated/schema"
+import { ExampleEntity, TransferDAI } from "../generated/schema"
 
 export function handleApproval(event: Approval): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -64,4 +64,15 @@ export function handleApproval(event: Approval): void {
 
 export function handleLogNote(event: LogNote): void {}
 
-export function handleTransfer(event: Transfer): void {}
+export function handleTransfer(event: TransferEvent): void {
+  let daiEntity = new TransferDAI(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  );
+
+  daiEntity.by = event.params.src;
+  daiEntity.to = event.params.dst;
+  daiEntity.amount = event.params.wad;
+
+  daiEntity.save()
+
+}

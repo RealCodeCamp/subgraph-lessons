@@ -4,3 +4,11 @@ type ExampleEntity @entity {
   src: Bytes! # address
   guy: Bytes! # address
 }
+
+# Transfer(indexed address,indexed address,uint256)
+type Transfer @entity {
+  id: ID!
+  by: Bytes! # address
+  to: Bytes! # address
+  amount: BigInt! # BigInt or BigDecimal
+}
